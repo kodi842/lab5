@@ -9,8 +9,7 @@ void createG(int** matrix, int n) {
         for (int j = i; j < n; j++) {
             if (i == j) {
                 matrix[i][j] = 0;
-            }
-            else {
+            } else {
                 int edge = rand() % 2;
                 matrix[i][j] = edge;
                 matrix[j][i] = edge;
@@ -161,6 +160,81 @@ int sizeGmi(int** matrix, int n, int edges) {
     return count;
 }
 
+// Функция поиска изолированных вершин по матрице инцидентности
+void findIS_MI(int** matrix, int n, int edges) {
+    printf("Изолированные вершины (по матрице инцидентности): ");
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        int isolated = 1;
+        for (int j = 0; j < edges; j++) {
+            if (matrix[i][j] == 1) {
+                isolated = 0;
+                break;
+            }
+        }
+        if (isolated) {
+            printf("%d ", i);
+            count++;
+        }
+    }
+    if (count == 0) {
+        printf("нет");
+    }
+    printf("\n");
+}
+
+// Функция поиска концевых вершин по матрице инцидентности
+void findEND_MI(int** matrix, int n, int edges) {
+    printf("Концевые вершины (по матрице инцидентности): ");
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        int degree = 0;
+        for (int j = 0; j < edges; j++) {
+            if (matrix[i][j] == 1) {
+                degree++;
+            }
+        }
+        if (degree == 1) {
+            printf("%d ", i);
+            count++;
+        }
+    }
+    if (count == 0) {
+        printf("нет");
+    }
+    printf("\n");
+}
+
+// Функция поиска доминирующих вершин по матрице инцидентности
+void findDOM_MI(int** matrix, int n, int edges) {
+    int* degrees = (int*)calloc(n, sizeof(int));
+    int max_degree = -1;
+    for (int j = 0; j < edges; j++) {
+        for (int i = 0; i < n; i++) {
+            if (matrix[i][j] == 1) {
+                degrees[i]++;
+                if (degrees[i] > max_degree) {
+                    max_degree = degrees[i];
+                }
+            }
+        }
+    }
+
+    printf("Доминирующие вершины (по матрице инцидентности, степень %d): ", max_degree);
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (degrees[i] == max_degree) {
+            printf("%d ", i);
+            count++;
+        }
+    }
+    if (count == 0) {
+        printf("нет");
+    }
+    printf("\n");
+    free(degrees);
+}
+
 int main() {
     int n;
 
@@ -195,16 +269,5 @@ int main() {
     int inc_edges = sizeGmi(inc_matrix, n, edges);
     printf("Размер графа (количество ребер) по матрице инцидентности: %d\n", inc_edges);
 
-    findIS(inc_matrix, n);
-    findEND(inc_matrix, n);
-    findDOM(inc_matrix, n);
-
-    for (int i = 0; i < n; i++) {
-        free(adj_matrix[i]);
-        free(inc_matrix[i]);
-    }
-    free(adj_matrix);
-    free(inc_matrix);
-
-    return 0;
-}
+    findIS_MI(inc_matrix, n, edges);
+    findEND_MI(inc_matrix,
