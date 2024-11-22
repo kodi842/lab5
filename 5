@@ -258,16 +258,4 @@ int main() {
     findEND(adj_m, n);
     findDOM(adj_m, n);
 
-    int** inc_m = (int**)malloc(n * sizeof(int*));
-    for (int i = 0; i < n; i++) {
-        inc_m[i] = (int*)calloc(es, sizeof(int));
-    }
-
-    createMI(adj_m, inc_m, n, es);
-    printMI(inc_m, n, es);
-
-    int inc_es = sizeGmi(inc_m, n, es);
-    printf("Размер графа (количество ребер) по матрице инцидентности: %d\n", inc_es);
-
-    findIS_MI(inc_m, n, es);
-    findEND_MI(inc_m,
+    int** inc_m = (int**)malloc
