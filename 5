@@ -3,57 +3,57 @@
 #include <time.h>
 
 // Функция генерации матрицы смежности
-void createG(int** matrix, int n) {
+void createG(int** m, int n) {
     srand(time(NULL));
     for (int i = 0; i < n; i++) {
         for (int j = i; j < n; j++) {
             if (i == j) {
-                matrix[i][j] = 0;
+                m[i][j] = 0;
             } else {
-                int edge = rand() % 2;
-                matrix[i][j] = edge;
-                matrix[j][i] = edge;
+                int e = rand() % 2;
+                m[i][j] = e;
+                m[j][i] = e;
             }
         }
     }
 }
 
 // Функция вывода матрицы
-void printM(int** matrix, int n) {
+void printM(int** m, int n) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            printf("%d ", matrix[i][j]);
+            printf("%d ", m[i][j]);
         }
         printf("\n");
     }
 }
 
 // Функция вычисления размера графа (количество ребер)
-int sizeG(int** matrix, int n) {
-    int edges = 0;
+int sizeG(int** m, int n) {
+    int es = 0;
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
-            if (matrix[i][j] == 1) {
-                edges++;
+            if (m[i][j] == 1) {
+                es++;
             }
         }
     }
-    return edges;
+    return es;
 }
 
 // Функция поиска изолированных вершин
-void findIS(int** matrix, int n) {
+void findIS(int** m, int n) {
     printf("Изолированные вершины: ");
     int count = 0;
     for (int i = 0; i < n; i++) {
-        int isolated = 1;
+        int iso = 1;
         for (int j = 0; j < n; j++) {
-            if (matrix[i][j] == 1) {
-                isolated = 0;
+            if (m[i][j] == 1) {
+                iso = 0;
                 break;
             }
         }
-        if (isolated) {
+        if (iso) {
             printf("%d ", i);
             count++;
         }
@@ -65,17 +65,17 @@ void findIS(int** matrix, int n) {
 }
 
 // Функция поиска концевых вершин
-void findEND(int** matrix, int n) {
+void findEND(int** m, int n) {
     printf("Концевые вершины: ");
     int count = 0;
     for (int i = 0; i < n; i++) {
-        int degree = 0;
+        int deg = 0;
         for (int j = 0; j < n; j++) {
-            if (matrix[i][j] == 1) {
-                degree++;
+            if (m[i][j] == 1) {
+                deg++;
             }
         }
-        if (degree == 1) {
+        if (deg == 1) {
             printf("%d ", i);
             count++;
         }
@@ -87,30 +87,30 @@ void findEND(int** matrix, int n) {
 }
 
 // Функция поиска доминирующих вершин
-void findDOM(int** matrix, int n) {
-    int max_degree = -1;
+void findDOM(int** m, int n) {
+    int mdeg = -1;
     for (int i = 0; i < n; i++) {
-        int degree = 0;
+        int deg = 0;
         for (int j = 0; j < n; j++) {
-            if (matrix[i][j] == 1) {
-                degree++;
+            if (m[i][j] == 1) {
+                deg++;
             }
         }
-        if (degree > max_degree) {
-            max_degree = degree;
+        if (deg > mdeg) {
+            mdeg = deg;
         }
     }
 
-    printf("Доминирующие вершины (степень %d): ", max_degree);
+    printf("Доминирующие вершины (степень %d): ", mdeg);
     int count = 0;
     for (int i = 0; i < n; i++) {
-        int degree = 0;
+        int deg = 0;
         for (int j = 0; j < n; j++) {
-            if (matrix[i][j] == 1) {
-                degree++;
+            if (m[i][j] == 1) {
+                deg++;
             }
         }
-        if (degree == max_degree) {
+        if (deg == mdeg) {
             printf("%d ", i);
             count++;
         }
@@ -122,36 +122,36 @@ void findDOM(int** matrix, int n) {
 }
 
 // Функция генерации матрицы инцидентности
-void createMI(int** adj_matrix, int** inc_matrix, int n, int edges) {
-    int edge_index = 0;
+void createMI(int** adj_m, int** inc_m, int n, int es) {
+    int e_index = 0;
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
-            if (adj_matrix[i][j] == 1) {
-                inc_matrix[i][edge_index] = 1;
-                inc_matrix[j][edge_index] = 1;
-                edge_index++;
+            if (adj_m[i][j] == 1) {
+                inc_m[i][e_index] = 1;
+                inc_m[j][e_index] = 1;
+                e_index++;
             }
         }
     }
 }
 
 // Функция вывода матрицы инцидентности
-void printMI(int** matrix, int n, int edges) {
+void printMI(int** m, int n, int es) {
     printf("Матрица инцидентности:\n");
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < edges; j++) {
-            printf("%d ", matrix[i][j]);
+        for (int j = 0; j < es; j++) {
+            printf("%d ", m[i][j]);
         }
         printf("\n");
     }
 }
 
 // Функция вычисления размера графа (количество ребер) по матрице инцидентности
-int sizeGmi(int** matrix, int n, int edges) {
+int sizeGmi(int** m, int n, int es) {
     int count = 0;
-    for (int j = 0; j < edges; j++) {
+    for (int j = 0; j < es; j++) {
         for (int i = 0; i < n; i++) {
-            if (matrix[i][j] == 1) {
+            if (m[i][j] == 1) {
                 count++;
                 break;
             }
@@ -161,18 +161,18 @@ int sizeGmi(int** matrix, int n, int edges) {
 }
 
 // Функция поиска изолированных вершин по матрице инцидентности
-void findIS_MI(int** matrix, int n, int edges) {
+void findIS_MI(int** m, int n, int es) {
     printf("Изолированные вершины (по матрице инцидентности): ");
     int count = 0;
     for (int i = 0; i < n; i++) {
-        int isolated = 1;
-        for (int j = 0; j < edges; j++) {
-            if (matrix[i][j] == 1) {
-                isolated = 0;
+        int iso = 1;
+        for (int j = 0; j < es; j++) {
+            if (m[i][j] == 1) {
+                iso = 0;
                 break;
             }
         }
-        if (isolated) {
+        if (iso) {
             printf("%d ", i);
             count++;
         }
@@ -184,17 +184,17 @@ void findIS_MI(int** matrix, int n, int edges) {
 }
 
 // Функция поиска концевых вершин по матрице инцидентности
-void findEND_MI(int** matrix, int n, int edges) {
+void findEND_MI(int** m, int n, int es) {
     printf("Концевые вершины (по матрице инцидентности): ");
     int count = 0;
     for (int i = 0; i < n; i++) {
-        int degree = 0;
-        for (int j = 0; j < edges; j++) {
-            if (matrix[i][j] == 1) {
-                degree++;
+        int deg = 0;
+        for (int j = 0; j < es; j++) {
+            if (m[i][j] == 1) {
+                deg++;
             }
         }
-        if (degree == 1) {
+        if (deg == 1) {
             printf("%d ", i);
             count++;
         }
@@ -206,24 +206,24 @@ void findEND_MI(int** matrix, int n, int edges) {
 }
 
 // Функция поиска доминирующих вершин по матрице инцидентности
-void findDOM_MI(int** matrix, int n, int edges) {
-    int* degrees = (int*)calloc(n, sizeof(int));
-    int max_degree = -1;
-    for (int j = 0; j < edges; j++) {
+void findDOM_MI(int** m, int n, int es) {
+    int* degs = (int*)calloc(n, sizeof(int));
+    int mdeg = -1;
+    for (int j = 0; j < es; j++) {
         for (int i = 0; i < n; i++) {
-            if (matrix[i][j] == 1) {
-                degrees[i]++;
-                if (degrees[i] > max_degree) {
-                    max_degree = degrees[i];
+            if (m[i][j] == 1) {
+                degs[i]++;
+                if (degs[i] > mdeg) {
+                    mdeg = degs[i];
                 }
             }
         }
     }
 
-    printf("Доминирующие вершины (по матрице инцидентности, степень %d): ", max_degree);
+    printf("Доминирующие вершины (по матрице инцидентности, степень %d): ", mdeg);
     int count = 0;
     for (int i = 0; i < n; i++) {
-        if (degrees[i] == max_degree) {
+        if (degs[i] == mdeg) {
             printf("%d ", i);
             count++;
         }
@@ -232,7 +232,7 @@ void findDOM_MI(int** matrix, int n, int edges) {
         printf("нет");
     }
     printf("\n");
-    free(degrees);
+    free(degs);
 }
 
 int main() {
@@ -241,33 +241,33 @@ int main() {
     printf("Введите количество вершин графа: ");
     scanf("%d", &n);
 
-    int** adj_matrix = (int**)malloc(n * sizeof(int*));
+    int** adj_m = (int**)malloc(n * sizeof(int*));
     for (int i = 0; i < n; i++) {
-        adj_matrix[i] = (int*)malloc(n * sizeof(int));
+        adj_m[i] = (int*)malloc(n * sizeof(int));
     }
 
-    createG(adj_matrix, n);
+    createG(adj_m, n);
 
     printf("Матрица смежности для неориентированного графа:\n");
-    printM(adj_matrix, n);
+    printM(adj_m, n);
 
-    int edges = sizeG(adj_matrix, n);
-    printf("Размер графа (количество ребер): %d\n", edges);
+    int es = sizeG(adj_m, n);
+    printf("Размер графа (количество ребер): %d\n", es);
 
-    findIS(adj_matrix, n);
-    findEND(adj_matrix, n);
-    findDOM(adj_matrix, n);
+    findIS(adj_m, n);
+    findEND(adj_m, n);
+    findDOM(adj_m, n);
 
-    int** inc_matrix = (int**)malloc(n * sizeof(int*));
+    int** inc_m = (int**)malloc(n * sizeof(int*));
     for (int i = 0; i < n; i++) {
-        inc_matrix[i] = (int*)calloc(edges, sizeof(int));
+        inc_m[i] = (int*)calloc(es, sizeof(int));
     }
 
-    createMI(adj_matrix, inc_matrix, n, edges);
-    printMI(inc_matrix, n, edges);
+    createMI(adj_m, inc_m, n, es);
+    printMI(inc_m, n, es);
 
-    int inc_edges = sizeGmi(inc_matrix, n, edges);
-    printf("Размер графа (количество ребер) по матрице инцидентности: %d\n", inc_edges);
+    int inc_es = sizeGmi(inc_m, n, es);
+    printf("Размер графа (количество ребер) по матрице инцидентности: %d\n", inc_es);
 
-    findIS_MI(inc_matrix, n, edges);
-    findEND_MI(inc_matrix,
+    findIS_MI(inc_m, n, es);
+    findEND_MI(inc_m,
