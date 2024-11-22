@@ -241,6 +241,7 @@ int main() {
     printf("Введите количество вершин графа: ");
     scanf("%d", &n);
 
+    // Выделение памяти для матрицы смежности
     int** adj_m = (int**)malloc(n * sizeof(int*));
     for (int i = 0; i < n; i++) {
         adj_m[i] = (int*)malloc(n * sizeof(int));
@@ -258,4 +259,26 @@ int main() {
     findEND(adj_m, n);
     findDOM(adj_m, n);
 
-    int** inc_m = (int**)malloc
+    // Выделение памяти для матрицы инцидентности
+    int** inc_m = (int**)malloc(n * sizeof(int*));
+    for (int i = 0; i < n; i++) {
+        inc_m[i] = (int*)malloc(es * sizeof(int));
+    }
+
+    createMI(adj_m, inc_m, n, es);
+    printMI(inc_m, n, es);
+
+    findIS_MI(inc_m, n, es);
+    findEND_MI(inc_m, n, es);
+    findDOM_MI(inc_m, n, es);
+
+    for (int i = 0; i < n; i++) {
+        free(adj_m[i]);
+        free(inc_m[i]);
+    }
+    free(adj_m);
+    free(inc_m);
+
+    return 0;
+}
+
