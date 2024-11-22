@@ -88,20 +88,7 @@ void findEND(int** m, int n) {
 
 // Функция поиска доминирующих вершин
 void findDOM(int** m, int n) {
-    int mdeg = -1;
-    for (int i = 0; i < n; i++) {
-        int deg = 0;
-        for (int j = 0; j < n; j++) {
-            if (m[i][j] == 1) {
-                deg++;
-            }
-        }
-        if (deg > mdeg) {
-            mdeg = deg;
-        }
-    }
-
-    printf("Доминирующие вершины (степень %d): ", mdeg);
+    printf("Доминирующие вершины: ");
     int count = 0;
     for (int i = 0; i < n; i++) {
         int deg = 0;
@@ -110,7 +97,7 @@ void findDOM(int** m, int n) {
                 deg++;
             }
         }
-        if (deg == mdeg) {
+        if (deg == n - 1) {
             printf("%d ", i);
             count++;
         }
@@ -148,16 +135,7 @@ void printMI(int** m, int n, int es) {
 
 // Функция вычисления размера графа (количество ребер) по матрице инцидентности
 int sizeGmi(int** m, int n, int es) {
-    int count = 0;
-    for (int j = 0; j < es; j++) {
-        for (int i = 0; i < n; i++) {
-            if (m[i][j] == 1) {
-                count++;
-                break;
-            }
-        }
-    }
-    return count;
+    return es; // Количество ребер в матрице инцидентности уже равно es
 }
 
 // Функция поиска изолированных вершин по матрице инцидентности
@@ -208,18 +186,15 @@ void findEND_MI(int** m, int n, int es) {
 // Функция поиска доминирующих вершин по матрице инцидентности
 void findDOM_MI(int** m, int n, int es) {
     int* degs = (int*)calloc(n, sizeof(int));
-    int mdeg = -1;
     for (int j = 0; j < es; j++) {
         for (int i = 0; i < n; i++) {
             if (m[i][j] == 1) {
                 degs[i]++;
-                if (degs[i] > mdeg) {
-                    mdeg = degs[i];
-                }
             }
         }
     }
 
+    int mdeg = n - 1;
     printf("Доминирующие вершины (по матрице инцидентности, степень %d): ", mdeg);
     int count = 0;
     for (int i = 0; i < n; i++) {
@@ -268,17 +243,22 @@ int main() {
     createMI(adj_m, inc_m, n, es);
     printMI(inc_m, n, es);
 
+    printf("Размер графа (по матрице инцидентности): %d\n", sizeGmi(inc_m, n, es));
+
     findIS_MI(inc_m, n, es);
     findEND_MI(inc_m, n, es);
     findDOM_MI(inc_m, n, es);
 
+    // Освобождение памяти
     for (int i = 0; i < n; i++) {
         free(adj_m[i]);
-        free(inc_m[i]);
     }
     free(adj_m);
+
+    for (int i = 0; i < n; i++) {
+        free(inc_m[i]);
+    }
     free(inc_m);
 
     return 0;
 }
-
